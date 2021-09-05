@@ -8,6 +8,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = "CuriousUtils"
 include ':app'
-include ':core_jdk'
 include ':core_android'
 include ':third_party_exoplayer'
+include ':core_jdk'
+include ':jetpack_lifecycles'
