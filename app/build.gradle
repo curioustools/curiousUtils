@@ -8,7 +8,7 @@ android {
     buildToolsVersion parent.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId parent.ext.groupId + "."+ parent.ext.appName
+        applicationId parent.ext.groupId
 
         minSdkVersion parent.ext.minSdkVersion
         targetSdkVersion parent.ext.targetSdkVersion

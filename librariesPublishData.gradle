@@ -1,0 +1,31 @@
+apply plugin: "maven-publish"
+
+// Because the components are created only during the afterEvaluate phase, you must configure your publications using the afterEvaluate() lifecycle method.
+afterEvaluate {
+    publishing {
+        publications {
+
+            release(MavenPublication) { // Creates a Maven publication called "release".
+                from components.release // Applies the component for the release build variant.
+
+                groupId = parent.ext.groupId
+                artifactId = project.getName()
+                version =  parent.ext.versionName
+
+            }
+        }
+    }
+}
+
+// Gradle task to generate sources after building a release aar
+//task sourcesJar(type: Jar) {
+//    archiveClassifier = 'sources'
+//    from android.sourceSets.main.java.srcDirs
+//}
+//
+//tasks.whenTaskAdded { task ->
+//    if (task.name == 'assembleRelease') {
+//        task.dependsOn 'sourcesJar'
+//    }
+//}
+

@@ -1,4 +1,4 @@
-apply from: "${project.rootDir}/androidLibCommonData.gradle"
+apply from: "${project.rootDir}/librariesCommonDataAndroid.gradle"
 
 android{
     buildFeatures {
