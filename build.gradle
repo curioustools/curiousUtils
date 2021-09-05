@@ -19,6 +19,11 @@ buildscript {
         versionCode = 2
         versionName = "2021.09.05.2"
         groupId = "work.curioustools.curiousUtils"
+
+
+        //specific common libs
+        coreKtx = "1.6.0"
+        appCompat = "1.3.1"
     }
 }
 
