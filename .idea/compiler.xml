@@ -5,6 +5,7 @@
       <module name="CuriousUtils.app" target="11" />
       <module name="CuriousUtils.core_android" target="11" />
       <module name="CuriousUtils.ext.core_android" target="11" />
+      <module name="CuriousUtils.third_party_exoplayer" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
