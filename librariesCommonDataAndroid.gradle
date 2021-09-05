@@ -33,4 +33,10 @@ android {
         jvmTarget = '1.8'
     }
 }
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+
 apply from: "${project.rootDir}/librariesPublishData.gradle"
+
+//todo : retrofit arch, glide, gson extensions.

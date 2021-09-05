@@ -18,14 +18,14 @@ afterEvaluate {
 }
 
 // Gradle task to generate sources after building a release aar
-//task sourcesJar(type: Jar) {
-//    archiveClassifier = 'sources'
-//    from android.sourceSets.main.java.srcDirs
-//}
-//
-//tasks.whenTaskAdded { task ->
-//    if (task.name == 'assembleRelease') {
-//        task.dependsOn 'sourcesJar'
-//    }
-//}
+task sourcesJar(type: Jar) {
+    archiveClassifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name == 'assembleRelease') {
+        task.dependsOn 'sourcesJar'
+    }
+}
 
