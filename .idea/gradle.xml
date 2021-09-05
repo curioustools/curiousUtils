@@ -12,9 +12,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/ext" />
-            <option value="$PROJECT_DIR$/ext/core_android" />
-            <option value="$PROJECT_DIR$/ext/core_jdk" />
+            <option value="$PROJECT_DIR$/core_android" />
+            <option value="$PROJECT_DIR$/core_jdk" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

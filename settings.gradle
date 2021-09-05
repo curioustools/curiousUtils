@@ -8,5 +8,5 @@ dependencyResolutionManagement {
 }
 rootProject.name = "CuriousUtils"
 include ':app'
-include ':ext:core_jdk'
-include ':ext:core_android'
+include ':core_jdk'
+include ':core_android'
