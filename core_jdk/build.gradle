@@ -1,1 +1,3 @@
-apply from: "${project.rootDir}/librariesCommonDataJDK.gradle"
+apply from: "${project.rootDir}/librariesCommonDataAndroid.gradle"
+
+//core-jdk = only java based extensions
