@@ -18,13 +18,14 @@ buildscript {
         targetSdkVersion = 30
         minSdkVersion = 21
         versionCode = 2
-        versionName = "2021.09.05.2"
+        versionName = "2021.09.09.1"
         groupId = "work.curioustools.curiousUtils"
 
 
         //specific common libs
         coreKtx = "1.6.0"
         appCompat = "1.3.1"
+        coroutines = "1.5.1"
     }
 }
 
