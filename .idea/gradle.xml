@@ -12,9 +12,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/core_android" />
+            <option value="$PROJECT_DIR$/core_droidjet" />
             <option value="$PROJECT_DIR$/core_jdk" />
-            <option value="$PROJECT_DIR$/jetpack_lifecycles" />
             <option value="$PROJECT_DIR$/third_party_exoplayer" />
             <option value="$PROJECT_DIR$/third_party_network" />
           </set>

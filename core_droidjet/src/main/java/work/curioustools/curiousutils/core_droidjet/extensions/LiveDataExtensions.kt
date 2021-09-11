@@ -1,4 +1,4 @@
-package work.curioustools.jetpack_lifecycles
+package work.curioustools.curiousutils.core_droidjet.extensions
 
 import androidx.lifecycle.MutableLiveData
 

@@ -1,4 +1,4 @@
-package work.curioustools.core_android
+package work.curioustools.curiousutils.core_droidjet.extensions
 
 import android.content.Context
 import android.content.Intent

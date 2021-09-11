@@ -1,4 +1,4 @@
-package work.curioustools.core_android
+package work.curioustools.curiousutils.core_droidjet.extensions
 
 import android.app.Activity
 import android.view.View
@@ -6,8 +6,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
-import work.curioustools.core_android.hideKeyboard
-import work.curioustools.core_android.showKeyboard
 
 
 fun View.setVisible(show: Boolean, shownButInvisible: Boolean = false) {
