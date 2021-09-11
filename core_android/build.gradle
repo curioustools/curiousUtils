@@ -1,8 +1,7 @@
 apply from: "${project.rootDir}/librariesCommonDataAndroid.gradle"
 
-
+//core-android = android core components(activities/fragment/context/etc) + custom views
 dependencies {
-    //core-android = android core components(activities/fragment/context/etc) + views
     def core_ktx = parent.ext.coreKtx //"1.6.0"
     def appCompat =parent.ext.appCompat// "1.3.1"
 
