@@ -5,14 +5,28 @@ import com.google.gson.GsonBuilder
 import retrofit2.converter.gson.GsonConverterFactory
 
 object GsonUtils {
-    fun getGsonObj(serializeNulls: Boolean): Gson? {
-        return GsonBuilder().run {
-            if (serializeNulls) serializeNulls()
-            create()
-        }
+    fun getGsonOrNull(serializeNulls: Boolean =false): Gson? {
+        return kotlin.runCatching {
+            GsonBuilder().run {
+                if (serializeNulls) serializeNulls()
+                create()
+            }
+        }.getOrNull()
     }
 
-    fun createGsonConvertor(gson: Gson): GsonConverterFactory? {
+    fun getGsonOrError(serializeNulls: Boolean): Gson {
+        return getGsonOrNull(serializeNulls)!!
+    }
+
+    fun getGsonConvertorOrNull(
+        serializeNulls: Boolean = false,
+        gson: Gson? = getGsonOrNull(serializeNulls)
+    ): GsonConverterFactory? {
+        gson ?: return null
+        return kotlin.runCatching { GsonConverterFactory.create(gson) }.getOrNull()
+    }
+
+    fun getGsonConvertorOrError(gson: Gson): GsonConverterFactory {
         return GsonConverterFactory.create(gson)
     }
 }

@@ -4,17 +4,21 @@ import com.squareup.moshi.Moshi
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 object MoshiUtils {
-    fun getMoshiObj(): Moshi? {
-        return Moshi.Builder().build()
+
+    fun getMoshiOrNull(): Moshi? {
+        return kotlin.runCatching { Moshi.Builder().build() }.getOrNull()
+    }
+    fun getMoshiOrError(): Moshi {
+        return getMoshiOrNull()!!
     }
 
-    fun getMoshiConvertorOrNull(): MoshiConverterFactory? {
-        val mosh = getMoshiObj() ?: return null
-        return MoshiConverterFactory.create(mosh)
+    fun getMoshiConvertorOrNull(moshi: Moshi? = getMoshiOrNull()): MoshiConverterFactory? {
+        if(moshi ==null) return null
+        return  kotlin.runCatching { MoshiConverterFactory.create(moshi) }.getOrNull()
     }
 
-    fun getMoshiConvertorOrError(): MoshiConverterFactory {
-        return MoshiConverterFactory.create(getMoshiObj()!!)
+    fun getMoshiConvertorOrError(moshi: Moshi):MoshiConverterFactory{
+        return getMoshiConvertorOrNull(moshi)!!
     }
 
 

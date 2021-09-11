@@ -3,9 +3,9 @@ package work.curioustools.third_party_network.extensions
 import android.util.Log
 import retrofit2.Call
 import retrofit2.Response
-import work.curioustools.third_party_network.base_arch.BaseDto
-import work.curioustools.third_party_network.base_arch.BaseResponse
-import work.curioustools.third_party_network.base_arch.BaseResponseType
+import work.curioustools.third_party_network.arch_network.BaseDto
+import work.curioustools.third_party_network.arch_network.BaseResponse
+import work.curioustools.third_party_network.arch_network.BaseResponseType
 
 fun <T> Call<T>.executeAndUnify(): BaseResponse<T> {
     /**

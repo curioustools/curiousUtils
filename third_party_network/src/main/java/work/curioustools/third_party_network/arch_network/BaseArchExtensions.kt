@@ -1,4 +1,4 @@
-package work.curioustools.third_party_network.base_arch
+package work.curioustools.third_party_network.arch_network
 
 import java.util.*
 

@@ -1,11 +1,12 @@
 package work.curioustools.third_party_network.utils
 
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import work.curioustools.third_party_network.interceptors.HeaderInterceptor
 import work.curioustools.third_party_network.interceptors.InternetAvailabilityInterceptor
-import work.curioustools.third_party_network.interceptors.LoggingInterceptor
+import work.curioustools.third_party_network.interceptors.OkHttpLoggingInterceptorUtils
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
@@ -45,24 +46,44 @@ object OkHttpUtils {
         writeTimeout: Pair<Long, TimeUnit> = Pair(1L, TimeUnit.MINUTES),
         readTimeout: Pair<Long, TimeUnit> = Pair(1L, TimeUnit.MINUTES),
         retryOnConnectionFailure: Boolean = true,
-        headers: HashMap<String, String>? = null,
-        loggingInterceptor: HttpLoggingInterceptor? = LoggingInterceptor.getInstance(),
-        networkInterceptor: InternetAvailabilityInterceptor? = null,
+        headerInterceptor: HeaderInterceptor? = null,
+        loggingInterceptor: HttpLoggingInterceptor? = null,
+        internetCheckInterceptor: InternetAvailabilityInterceptor? = null,
         otherInterceptors: List<Interceptor> = listOf(),
+        stetho: Interceptor? = null,
+        otherNetworkInterceptors:List<Interceptor> = listOf(),
         socketFactory: Pair<SSLSocketFactory, X509TrustManager>? = null
+
     ): OkHttpClient {
-        return OkHttpClient.Builder().let {
-            it.connectTimeout(connectTimeout.first, connectTimeout.second)
-            it.writeTimeout(writeTimeout.first, writeTimeout.second)
-            it.readTimeout(readTimeout.first, readTimeout.second)
-            it.retryOnConnectionFailure(retryOnConnectionFailure)
-            headers?.let { map -> it.addInterceptor(HeaderInterceptor(map)) }
-            loggingInterceptor?.let { logger -> it.addInterceptor(logger) }
-            networkInterceptor?.let { networkCheck -> it.addInterceptor(networkCheck) }
-            otherInterceptors.forEach { interceptor -> it.addInterceptor(interceptor) }
-            socketFactory?.let { pair -> kotlin.runCatching { it.sslSocketFactory(pair.first, pair.second) } }
-            it.build()
+        return OkHttpClient.Builder().let { builder ->
+            builder.connectTimeout(connectTimeout.first, connectTimeout.second)
+            builder.writeTimeout(writeTimeout.first, writeTimeout.second)
+            builder.readTimeout(readTimeout.first, readTimeout.second)
+            builder.retryOnConnectionFailure(retryOnConnectionFailure)
+            headerInterceptor?.let { builder.addInterceptor(it) }
+            loggingInterceptor?.let { builder.addInterceptor(it) }
+            internetCheckInterceptor?.let { builder.addInterceptor(it) }
+            otherInterceptors.forEach { builder.addInterceptor(it) }
+
+            stetho?.let { builder.addNetworkInterceptor(it) }
+            otherNetworkInterceptors.forEach { builder.addNetworkInterceptor(it) }
+
+            socketFactory?.let { pair -> kotlin.runCatching { builder.sslSocketFactory(pair.first, pair.second) } }
+
+            builder.build()
         }
+    }
+
+
+    fun getClient(headers: HashMap<String, String> ):OkHttpClient{
+        return getClient(headerInterceptor = HeaderInterceptor(headers))
+    }
+
+    fun getDebugClient():OkHttpClient{
+        return getClient(
+            loggingInterceptor = OkHttpLoggingInterceptorUtils.getInterceptor(),
+            stetho = StethoInterceptor()
+        )
     }
 
 }

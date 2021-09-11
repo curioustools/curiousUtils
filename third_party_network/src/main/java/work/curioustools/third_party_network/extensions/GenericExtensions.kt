@@ -5,13 +5,15 @@ import work.curioustools.third_party_network.utils.RetrofitUtils
 
 
 fun <T> T.toJson(pretty:Boolean = true,serializeNulls:Boolean = true):String{
-    return try {
-        GsonBuilder().setPrettyPrinting().serializeNulls().create().toJson(this)
-    }
-    catch (t:Throwable){
-        t.printStackTrace()
-        "{}"
-    }
+    val data = this
+    return kotlin.runCatching {
+        GsonBuilder().run {
+            if (pretty) this.setPrettyPrinting()
+            if (serializeNulls) this.serializeNulls()
+            this
+        }.create().toJson(data)
+    }.getOrNull()?: "{}"
+
 }
 
 fun <T> Class<T>.getApi(baseUrl: String): T {

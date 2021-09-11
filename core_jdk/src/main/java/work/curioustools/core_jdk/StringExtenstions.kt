@@ -3,7 +3,7 @@
 package work.curioustools.core_jdk
 
 // <EXTENSIONS>-----------------------------------------------------------------------------------------------------
-fun validSpecialCharacters() = "~`!@#$%^&*()_-+={[}]|:;<,>.?/"
+
 
 fun Char.isStrictlyALowerCase() = this in 'a'..'z' // will not match characters like ä
 
@@ -11,7 +11,7 @@ fun Char.isStrictlyAnUpperCase() = this in 'A'..'Z' // will not match characters
 
 fun Char.isStrictlyADigit() = this in '0'..'9'
 
-fun Char.isStrictlyAValidSpecialLetter() = this in validSpecialCharacters()// does not have escape characters like  \ " '
+fun Char.isStrictlyAValidSpecialLetter() = this in CommonStringRegex.VALID_SPECIAL_CHARACTERS// does not have escape characters like  \ " '
 
 fun String?.toRegexOrError(): Regex {
     this ?: error("null string passed to function `toRegexOrError` ($this) cannot be converted to regex")
@@ -91,12 +91,20 @@ fun String.capitalizeEachWord(separator: Char = ' '): String {
 
     return this.split(separator).joinToString(" ") { it.startWithUpperCase() }
 }
+
+fun String?.toIntSafe(default: Int = 0): Int {
+    if (this == null) return default
+    return kotlin.runCatching { this.toIntOrNull() }.getOrNull() ?: default
+}
+
 // </EXTENSIONS>-----------------------------------------------------------------------------------------------------
 
 // <HELPERS>---------------------------------------------------------------------------------------------------------
 
 object CommonStringRegex {
     const val VALID_EMAIL = """[a-zA-Z0-9\+\.\_\%\-\+]{1,256}\@[a-zA-Z0-9][a-zA-Z0-9\-]{0,64}(\.[a-zA-Z0-9][a-zA-Z0-9\-]{0,25})+"""
+
+    const val VALID_SPECIAL_CHARACTERS = "~`!@#$%^&*()_-+={[}]|:;<,>.?/"
 }
 
 enum class EmailValidationResponse(val msg: String) {
@@ -110,7 +118,7 @@ sealed class PasswordValidationResponse(open val msg: String) {
     object NULL_OR_BLANK : PasswordValidationResponse("Must not be empty")
     data class NO_MIN_UPPERCASE_LETTERS(val minCount: Int = 1) : PasswordValidationResponse("Must have at least $minCount Capital letter(s)")
     data class NO_LOWERCASE_LETTERS(val minCount: Int = 1) : PasswordValidationResponse("Must have at least $minCount Lowercase letter(s)")
-    data class NO_MIN_Special_LETTERS(val minCount: Int = 1) : PasswordValidationResponse("Must have at least $minCount letter(s) from ${validSpecialCharacters()}")
+    data class NO_MIN_Special_LETTERS(val minCount: Int = 1) : PasswordValidationResponse("Must have at least $minCount letter(s) from ${CommonStringRegex.VALID_SPECIAL_CHARACTERS}")
     data class NO_MIN_DIGITS(val minCount: Int = 1) : PasswordValidationResponse("Must have at least $minCount digit(s)")
     data class OUT_OF_BOUNDS_ERROR(val min: Int, val max: Int) : PasswordValidationResponse("Must have $min to $max characters")
     data class ILLEGAL_CHARACTER(val c: Char) : PasswordValidationResponse(" '$c ' is not a valid character")

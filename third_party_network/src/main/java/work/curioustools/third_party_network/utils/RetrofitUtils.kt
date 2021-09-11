@@ -10,7 +10,7 @@ import java.util.concurrent.Executors
 object RetrofitUtils {
     fun getRetrofit(
         baseUrl: String = "",
-        externalOkHttpClient: OkHttpClient = OkHttpUtils.getClient(),
+        okHttpClient: OkHttpClient = OkHttpUtils.getDebugClient(),
         externalConvertors: MutableList<Converter.Factory?> = mutableListOf(
             ScalarConvertorUtils.getConvertorOrNull(),
             MoshiUtils.getMoshiConvertorOrNull()
@@ -20,7 +20,7 @@ object RetrofitUtils {
     ): Retrofit {
         return Retrofit.Builder().let { builder ->
             builder.baseUrl(baseUrl)
-            builder.client(externalOkHttpClient)
+            builder.client(okHttpClient)
             externalConvertors.filterNotNull().forEach { builder.addConverterFactory(it) }
             callAdapterFactories.forEach { builder.addCallAdapterFactory(it) }
             executor?.let { builder.callbackExecutor(it) }
