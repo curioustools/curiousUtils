@@ -18,7 +18,7 @@ buildscript {
         targetSdkVersion = 30
         minSdkVersion = 21
         versionCode = 15
-        versionName = "2021.15"
+        versionName = "2021.9.15"
         groupId = "work.curioustools.curiousUtils"
 
 
