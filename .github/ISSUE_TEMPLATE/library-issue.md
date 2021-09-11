@@ -7,6 +7,17 @@ assignees: ''
 
 ---
 
+
+Before filing a feature request:
+-----------------------
+- Search existing open issues: https://github.com/curioustools/curiousutils/issues
+- Search existing pull requests: https://github.com/curioustools/curiousutils/pulls
+
+When filing a feature request:
+-----------------------
+Replace the content in the sections below.
+
+
 ## Library Details
 - Version:  
 - package : eg `core-jdk`
