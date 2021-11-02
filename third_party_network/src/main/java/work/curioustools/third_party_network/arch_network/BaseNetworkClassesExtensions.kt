@@ -3,9 +3,9 @@ package work.curioustools.third_party_network.arch_network
 import android.content.Context
 import android.widget.Toast
 
-fun <DTO, RESP> BaseResponse<DTO>.convertTo(successConvertor: (DTO) -> RESP, failureConvertor:((DTO?)->RESP?)? = null): BaseResponse<RESP> {
+fun <DTO, RESP> BaseResponse<DTO>.convertTo(successConvertor: (DTO) -> RESP): BaseResponse<RESP> {
     return when (this) {
-        is BaseResponse.Failure -> BaseResponse.Failure(failureConvertor?.invoke(this.body), this.status,this.exception)
+        is BaseResponse.Failure -> BaseResponse.Failure(null, this.status,this.exception)
         is BaseResponse.Success -> BaseResponse.Success(successConvertor.invoke(this.body))
     }
 
@@ -15,7 +15,7 @@ fun <DTO, RESP> BaseResponse<DTO>.convertTo(successConvertor: (DTO) -> RESP, fai
 fun <T> BaseResponse<T>.printBaseResponse() {
     println("=====<BaseResponse> ========")
     val resp = this
-    println("response status =" + resp.status)
+    println("response status = ${resp.status}(${resp.status.code} | ${resp.status.msg})" )
     when (resp) {
         is BaseResponse.Failure -> {
             println("response = ${resp.body}")
