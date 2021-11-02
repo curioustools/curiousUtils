@@ -1,9 +1,12 @@
 package work.curioustools.third_party_network.extensions
 
+import android.content.Context
+import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.AppCompatImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import work.curioustools.third_party_network.arch_network.BaseResponse
 
 
 fun AppCompatImageView.loadImageFromInternet(
