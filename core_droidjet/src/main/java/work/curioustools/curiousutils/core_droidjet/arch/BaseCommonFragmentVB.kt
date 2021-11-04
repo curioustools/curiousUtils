@@ -5,15 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
-import work.curioustools.curiousutils.core_droidjet.vb_helpers.VBHolder
-import work.curioustools.curiousutils.core_droidjet.vb_helpers.VBHolderImpl
+import work.curioustools.curiousutils.core_droidjet.arch.vb.VBHolder
+import work.curioustools.curiousutils.core_droidjet.arch.vb.VBHolderImpl
 
 abstract class BaseCommonFragmentVB<VB : ViewBinding> :
     BaseCommonFragment(),
     VBHolder<VB> by VBHolderImpl() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return getBindingForThisComponent(inflater, container, savedInstanceState).registeredRoot(this)
+        return getBindingForThisComponent(inflater, container, savedInstanceState).getVBView(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
