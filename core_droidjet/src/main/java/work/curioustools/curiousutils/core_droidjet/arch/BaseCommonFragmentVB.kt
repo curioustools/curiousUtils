@@ -5,9 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
+import work.curioustools.curiousutils.core_droidjet.IsTested
 import work.curioustools.curiousutils.core_droidjet.arch.vb.VBHolder
 import work.curioustools.curiousutils.core_droidjet.arch.vb.VBHolderImpl
 
+@IsTested("yes",addedExactFixComments = true,needsImprovement = true)
+//remove this class. its useless
 abstract class BaseCommonFragmentVB<VB : ViewBinding> :
     BaseCommonFragment(),
     VBHolder<VB> by VBHolderImpl() {

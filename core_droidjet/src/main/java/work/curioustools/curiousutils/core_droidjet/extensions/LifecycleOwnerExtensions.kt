@@ -20,9 +20,7 @@ const val NEW_TASK: Int = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVIT
 const val CLEAR_TOP: Int = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
 
 
-fun LifecycleOwner.launchActivity(destinationIntentWithConfig: Intent, launchOptions: Bundle,
-    requestCode: Int?,
-) {
+fun LifecycleOwner.launchActivity(destinationIntentWithConfig: Intent, launchOptions: Bundle, requestCode: Int?) {
     when (val owner = this) {
         is AppCompatActivity -> {
             if (requestCode != null) owner.startActivityForResult(destinationIntentWithConfig, requestCode, launchOptions)
@@ -71,7 +69,6 @@ inline fun <reified DEST_ACTIVITY : AppCompatActivity> LifecycleOwner.launchActi
     }
     launchActivity(launchIntent, launchOptions, requestCode)
 }
-
 
 
 fun LifecycleOwner.getOwnerContext(): Context? {

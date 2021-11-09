@@ -3,9 +3,12 @@ package work.curioustools.curiousutils.core_droidjet.arch
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.viewbinding.ViewBinding
+import work.curioustools.curiousutils.core_droidjet.IsTested
 import work.curioustools.curiousutils.core_droidjet.arch.vb.VBHolder
 import work.curioustools.curiousutils.core_droidjet.arch.vb.VBHolderImpl
 
+@IsTested("yes",addedExactFixComments = true,needsImprovement = true)
+//remove this class. its useless
 abstract class BaseCommonActivityVB<VB: ViewBinding>: BaseCommonActivity(), VBHolder<VB> by VBHolderImpl() {
     override fun onCreate(savedInstanceState: Bundle? ) {
         super.onCreate(savedInstanceState)

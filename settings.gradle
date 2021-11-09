@@ -14,4 +14,3 @@ include ':third_party_exoplayer'
 include ':third_party_network'
 //todo move to main package for easier access:
 // lib::all: for all libraries
-// lib::core for core droidjet and core jdk

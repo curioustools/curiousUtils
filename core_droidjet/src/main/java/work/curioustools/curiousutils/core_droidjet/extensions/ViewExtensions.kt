@@ -1,13 +1,15 @@
 package work.curioustools.curiousutils.core_droidjet.extensions
 
+import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.RotateAnimation
-import androidx.annotation.StringRes
+import android.view.inputmethod.InputMethodManager
 import androidx.browser.customtabs.CustomTabsIntent
 import com.google.android.material.snackbar.Snackbar
+import work.curioustools.curiousutils.core_droidjet.extensions.models.Snack
 
 fun Context?.launchCustomTabWebView(url:String){
     this?:return
@@ -40,9 +42,30 @@ fun View?.rotateSmoothly(from:Number = 0 , to: Number = 90, animSpeedMillis:Long
 
 }
 
-fun View?.showKeyboard() = this?.context.showKeyboard()
-fun View?.hideKeyboard() = this?.context.hideKeyboard(this)
-fun View?.showKeyboardForced() = this?.context?.showKeyboardForced(this)
+fun View?.showKeyboard() {
+    if (this == null || context == null) return
+    val inputMethodManager = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
+}
+
+fun View?.hideKeyboard() {
+    if (this == null || context == null) return
+    val inputMethodManager = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(windowToken, 0)
+
+}
+
+fun View?.showKeyboardForced() {
+    if (this == null || context == null) return
+    val inputMethodManager = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.showSoftInput(this, InputMethodManager.SHOW_FORCED)
+}
+
+
 fun View?.showToast(str: String) = this?.context?.showToast(str)
 
-fun View?.showSnackBar(msg: String = "", @StringRes msgRes: Int = -1, length: Int = Snackbar.LENGTH_SHORT) = this?.context?.showSnackBar(this, msg, msgRes, length)
+fun View?.showSnackBar(info: Snack = Snack()) {
+    this ?: return
+    val finalMsg = if (info.msgRes == -1) info.msg else context.getString(info.msgRes)
+    Snackbar.make(this, finalMsg, info.length).show()
+}

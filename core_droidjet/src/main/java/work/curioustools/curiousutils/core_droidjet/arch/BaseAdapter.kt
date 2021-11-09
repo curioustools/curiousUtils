@@ -1,10 +1,13 @@
 package work.curioustools.curiousutils.core_droidjet.arch
 
 import androidx.recyclerview.widget.RecyclerView
+import work.curioustools.curiousutils.core_droidjet.IsTested
 
-
+@IsTested("not fully tested, showing crashes",addedExactFixComments = false)
 abstract class BaseAdapter<VH : BaseVH> : BaseAdapterListHelpers<VH>(){
-    abstract fun onBindVH(holder: VH, position: Int, payloads: MutableList<Any>? = null)
+    open fun onBindVH(holder: VH, position: Int, payloads: MutableList<Any>? = null){
+        holder.bindData(getEntryAt(position),payloads)
+    }
 
     override fun onBindViewHolder(holder: VH, position: Int, payloads: MutableList<Any>) {
         onBindVH(holder, position, payloads)

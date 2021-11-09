@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#ddd"
+    tools:context=".PlainActivity">
+
+    <!--
+
+    R.id.configDRL -> configureSystemBar(configDRL)
+                R.id.configLRD -> configureSystemBar(configLRD)
+                R.id.configDDD -> configureSystemBar(configDDD)
+                R.id.configFSI -> configureSystemBar(configFSI)
+                R.id.configFSN -> configureSystemBar(configFSN)
+    -->
+
+    <Button
+        android:id="@+id/configDRL"
+        android:text="configDRL"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:onClick="onClick" />
+
+    <Button
+        android:id="@+id/configLRD"
+        android:text="configLRD"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:onClick="onClick" />
+
+    <Button
+        android:id="@+id/changeTint"
+        android:text="changeTint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:onClick="onClick" />
+
+    <Button
+        android:id="@+id/configDDD"
+        android:text="configDDD"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:onClick="onClick" />
+
+    <Button
+        android:id="@+id/configFSI"
+        android:text="configFSI"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:onClick="onClick" />
+
+    <Button
+        android:id="@+id/configFSN"
+        android:text="configFSN"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:onClick="onClick" />
+
+
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/et"
+        android:layout_margin="8dp"
+        android:background="@color/white"
+        android:padding="24dp"
+        />
+
+
+
+</LinearLayout>
