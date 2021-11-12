@@ -12,23 +12,27 @@ import java.io.File
 object ExoVideoCacheSingleton {
     private var cacheInternal: SimpleCache? = null
     fun getSimpleCacheSingleTon(appCtx: Context): SimpleCache {
-        val cacheFolder = File(appCtx.filesDir, "my_app_video_cache")
+        synchronized(this) {
+            val cacheFolder = File(appCtx.filesDir, "my_app_video_cache")
 
-        val cacheEvictor = LeastRecentlyUsedCacheEvictor(ExoConstants.ONE_GB.toLong()) // My cache size will be 1GB and it will automatically remove least recently used files if the size is reached out. other option is NoOpCacheEvictor, which shall cache all the times unless user's memory runs out
+            val cacheEvictor = LeastRecentlyUsedCacheEvictor(ExoConstants.ONE_GB.toLong()) // My cache size will be 1GB and it will automatically remove least recently used files if the size is reached out. other option is NoOpCacheEvictor, which shall cache all the times unless user's memory runs out
 
-        val databaseProvider: DatabaseProvider = ExoDatabaseProvider(appCtx)
-        val legacyIndexSecretKey: ByteArray? = null
-        val legacyIndexEncryption = false
-        val preferLegacyIndex = false
-        val cache = SimpleCache(
-            cacheFolder, cacheEvictor, databaseProvider,
-            legacyIndexSecretKey, legacyIndexEncryption, preferLegacyIndex
-        )
-        if(cacheInternal == null) cacheInternal = cache
-        return cacheInternal!!
+            val databaseProvider: DatabaseProvider = ExoDatabaseProvider(appCtx)
+            val legacyIndexSecretKey: ByteArray? = null
+            val legacyIndexEncryption = false
+            val preferLegacyIndex = false
+            val cache = SimpleCache(
+                cacheFolder, cacheEvictor, databaseProvider,
+                legacyIndexSecretKey, legacyIndexEncryption, preferLegacyIndex
+            )
+            if (cacheInternal == null) cacheInternal = cache
+            return cacheInternal!!
+        }
     }
     fun clean() {
-        //must be called when app crashes due to cache internal as already locked by some instance(this happens even after app kill) and NEVER OTHERWISE
-        cacheInternal = null
+       synchronized(this){
+           //must be called when app crashes due to cache internal as already locked by some instance(this happens even after app kill) and NEVER OTHERWISE
+           cacheInternal = null
+       }
     }
 }

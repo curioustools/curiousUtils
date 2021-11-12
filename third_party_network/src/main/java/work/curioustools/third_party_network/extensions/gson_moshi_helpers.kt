@@ -1,4 +1,4 @@
-package work.curioustools.third_party_network.utils
+package work.curioustools.third_party_network.extensions
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder

@@ -18,7 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.color.MaterialColors
-import work.curioustools.curiousutils.core_droidjet.IsTested
+
 import work.curioustools.curiousutils.core_droidjet.extensions.models.Snack
 import work.curioustools.curiousutils.core_droidjet.extensions.models.SystemBarsConfig
 import work.curioustools.curiousutils.core_droidjet.extensions.models.SystemBarsConfig.SystemBarType
@@ -27,40 +27,33 @@ import kotlin.concurrent.thread
 
 //Note : Activity extends context. therefore all the functions of context are available in activity
 
-@IsTested("yes")
 fun Context.getDrawableCompat(@DrawableRes res: Int): Drawable? {
     return ContextCompat.getDrawable(this, res)
 }
 
-@IsTested("yes")
 fun Context?.getColorCompat(@ColorRes colorRes: Int): Int {
     this ?: return android.R.color.black
     return ContextCompat.getColor(this, colorRes)
 }
 
-@IsTested("not tested")
 fun Context?.getColorStateListCompat(@ColorRes colorRes: Int): ColorStateList {
     val default: ColorStateList = ColorStateList.valueOf(Color.MAGENTA)
     this ?: return default
     return ContextCompat.getColorStateList(this, colorRes) ?: default
 }
 
-@IsTested("yes")
 fun Context?.showToast(str: String, length: Int = LENGTH_SHORT) {
     this ?: return
     Toast.makeText(this, str, length).show()
 }
 
-@IsTested("not tested")
 fun Context?.isDarkThemeOn(): Boolean {
     this ?: return false
     return resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
 }
 
-@IsTested("not tested")
 fun Context?.showKeyboard() = getAsView().showKeyboard()
 
-@IsTested("not tested")
 fun Context?.showKeyboardForced() = getAsView().showKeyboardForced()
 fun Context?.hideKeyboard() = getAsView().hideKeyboard()
 fun Context?.showSnackBar(info: Snack = Snack()) = getAsView()?.showSnackBar(info)
@@ -71,13 +64,19 @@ fun Context?.showSnackBar(info: Snack = Snack()) = getAsView()?.showSnackBar(inf
 fun Context?.getAsActivity(): AppCompatActivity? = this as? AppCompatActivity
 
 fun Context?.getAsView(): View? {
-    val focusedView = getAsActivity()?.currentFocus // will be null if no view is touched
-    val screenAsView = getAsActivity()?.findViewById<View>(android.R.id.content)// will be null if called before setContentView()
-    return focusedView ?: screenAsView
+    return try {
+        val focusedView = getAsActivity()?.currentFocus // will be null if no view is touched
+        val screenAsView = getAsActivity()?.findViewById<View>(android.R.id.content)// will be null if called before setContentView()
+        focusedView ?: screenAsView
+    }
+    catch (t: Throwable) {
+        t.printStackTrace()
+        null
+    }
 }
 
 fun Context?.finishDelayed(millis: Long) {
-    val activity = getAsActivity() ?:return
+    val activity = getAsActivity() ?: return
     thread {
         Thread.sleep(millis)
         activity.runOnUiThread { activity.finish() }
@@ -86,18 +85,18 @@ fun Context?.finishDelayed(millis: Long) {
 
 
 fun Context?.findNavControllerByID(fragmentId: Int): NavController {
-    val activity = getAsActivity()?: error("context cannot be casted as appcompat activity. library error on line 82, curiousutils/contextandactivityextension.kt")
+    val activity = getAsActivity() ?: error("context cannot be casted as appcompat activity. library error on line 82, curiousutils/contextandactivityextension.kt")
     val navHost = activity.supportFragmentManager.findFragmentById(fragmentId) as NavHostFragment
     return navHost.navController
 }
 
 fun Context?.findNavControllerByTAG(tag: String): NavController {
-    val activity = getAsActivity()?: error("context cannot be casted as appcompat activity. library error on line 82, curiousutils/contextandactivityextension.kt")
+    val activity = getAsActivity() ?: error("context cannot be casted as appcompat activity. library error on line 82, curiousutils/contextandactivityextension.kt")
     val navHost = activity.supportFragmentManager.findFragmentByTag(tag) as NavHostFragment
     return navHost.navController
 }
 
-fun Context?.configureSystemBar(config: SystemBarsConfig = SystemBarsConfig(),@ColorRes tintDeterminingColor:Int?= config.statusBarColorRes) {
+fun Context?.configureSystemBar(config: SystemBarsConfig = SystemBarsConfig(), @ColorRes tintDeterminingColor: Int? = config.statusBarColorRes) {
     // this needs to be called in onResume otherwise the flags will get removed, only works above android lollipop
     val activity = getAsActivity() ?: return
     if (!isAndroidGTEquals21L()) return
@@ -156,7 +155,7 @@ fun Context?.configureSystemBarsIconColors(@ColorRes color: Int?) {
         }
         isAndroidGTEquals26O() -> {
             bars.systemUiVisibility =
-                if (isLightColor) bars.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR  or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                if (isLightColor) bars.systemUiVisibility or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
                 else bars.systemUiVisibility and View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR.inv() and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
 
         }
@@ -208,11 +207,8 @@ fun Context?.configureSystemStatusIconColors(@ColorRes color: Int?) {
 
 fun Context?.isLightColor(@ColorRes colorRes: Int): Boolean {
     val color = getColorCompat(colorRes)
-    val libAnswer = MaterialColors.isColorLight(color)
     val customAnswer = Color.red(color) * 0.299 + Color.green(color) * 0.587 + Color.blue(color) * 0.114 > 160
-    libAnswer.log("Lib::")
-    customAnswer.log("custom::")
-    color.log("Color =")
+    //val libAnswer = MaterialColors.isColorLight(color).also { it.log("Lib::") }
     return customAnswer
 }
 

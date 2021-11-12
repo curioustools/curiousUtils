@@ -1,4 +1,4 @@
-package work.curioustools.third_party_network.interceptors
+package work.curioustools.third_party_network.extensions
 
 import android.Manifest
 import android.content.Context

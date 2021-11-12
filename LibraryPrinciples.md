@@ -45,3 +45,10 @@ fun Context?.showKeyboardForced(view: View? = null) {
 ```
 
 in here our task is to show keyboard. it requires 2 actors(context , view) to fulfil the task. thus its wrong to have  an extension of a dependency for task on another dependency, when they are both equal in priority.
+
+
+thus: 
+
+- X_Extensions.kt:  `DependencyClass.task(depValue:Any)`
+- X_Helper.kt: `task(dep1,dep2,...)`
+-X_Util.kt: `Class X_Util(){...}`

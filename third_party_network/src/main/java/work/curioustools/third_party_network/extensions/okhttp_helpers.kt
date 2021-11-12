@@ -1,12 +1,9 @@
-package work.curioustools.third_party_network.utils
+package work.curioustools.third_party_network.extensions
 
 import android.annotation.SuppressLint
 import android.content.Context
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import okhttp3.*
-import work.curioustools.third_party_network.interceptors.addHeaderInterceptor
-import work.curioustools.third_party_network.interceptors.addInternetCheckInterceptor
-import work.curioustools.third_party_network.interceptors.addLoggingInterceptor
 import java.net.CookieManager
 import java.net.CookiePolicy
 import java.net.Proxy

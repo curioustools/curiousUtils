@@ -2,9 +2,8 @@ package work.curioustools.curiousutils.core_droidjet.arch
 
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
-import work.curioustools.curiousutils.core_droidjet.IsTested
 
-@IsTested("not fully tested, showing crashes",addedExactFixComments = false)
+
 abstract class BaseAdapterListHelpers<VH : BaseVH> : RecyclerView.Adapter<VH>() {
     private val entries = mutableListOf<BaseListModel>()
 
@@ -23,6 +22,9 @@ abstract class BaseAdapterListHelpers<VH : BaseVH> : RecyclerView.Adapter<VH>() 
 
     fun getEntryAt(idx: Int): BaseListModel? {
         return entries.getOrNull(idx)
+    }
+    fun getEntryOrError(idx: Int): BaseListModel {
+        return entries[idx]
     }
 
     fun getAllEntries(): List<BaseListModel> {

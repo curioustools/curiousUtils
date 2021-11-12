@@ -1,24 +1,24 @@
 package work.curioustools.third_party_exoplayer
 
+import android.content.Context
 import android.net.Uri
+import com.google.android.exoplayer2.DefaultLoadControl
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.upstream.DataSpec
+import com.google.android.exoplayer2.upstream.DefaultAllocator
 import com.google.android.exoplayer2.upstream.cache.CacheKeyFactory
+import com.google.android.exoplayer2.util.Util
 
 
-fun String.toMediaItem(): MediaItem {
-    return MediaItem.fromUri(this)
+fun Context?.agent(fallback: String = "appName"): String {
+    this ?: return fallback
+    val pkg = this.applicationContext.packageName ?: return fallback
+    return Util.getUserAgent(this, pkg)
 }
 
-fun Uri?.toMediaItem(cacheKeyFactory: CacheKeyFactory?): MediaItem {
-    this ?: error("From Ansh :: Uri is null")
-    return MediaItem.Builder().let {
-        if(cacheKeyFactory!=null) {
-            val dataSpec = DataSpec(this)
-            val key = cacheKeyFactory.buildCacheKey(dataSpec)
-            it.setCustomCacheKey(key)
-        }
-        it.setUri(this)
-        it.build()
-    }
+
+fun String.toMediaItem(builder: MediaItem.Builder = getDefaultMediaItemBuilder()): MediaItem {
+    val uri = this.toUri()
+    return builder.setUri(uri).build()
+
 }

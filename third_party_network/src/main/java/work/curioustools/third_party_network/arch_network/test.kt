@@ -4,9 +4,9 @@ import retrofit2.Call
 import retrofit2.http.GET
 import work.curioustools.third_party_network.extensions.executeAndUnify
 import work.curioustools.third_party_network.extensions.getRetrofitBuilder
-import work.curioustools.third_party_network.utils.addGsonConvertor
-import work.curioustools.third_party_network.utils.addScalerConvertor
-import work.curioustools.third_party_network.utils.getMyOkHttpBuilderBasic
+import work.curioustools.third_party_network.extensions.addGsonConvertor
+import work.curioustools.third_party_network.extensions.addScalerConvertor
+import work.curioustools.third_party_network.extensions.getMyOkHttpBuilderBasic
 
 
 class RetrofitHelpersArchKtTest {

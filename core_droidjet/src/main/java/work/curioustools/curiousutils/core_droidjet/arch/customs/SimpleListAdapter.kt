@@ -3,13 +3,12 @@ package work.curioustools.curiousutils.core_droidjet.arch.customs
 import android.view.ViewGroup
 import androidx.annotation.Keep
 import androidx.viewbinding.ViewBinding
-import work.curioustools.curiousutils.core_droidjet.IsTested
+
 import work.curioustools.curiousutils.core_droidjet.arch.BaseAdapter
 import work.curioustools.curiousutils.core_droidjet.arch.BaseListModel
 import work.curioustools.curiousutils.core_droidjet.arch.BaseVH
 
 // a quick, easy to use option for showing list. just provide the initialiser and how to set data and your are good to go
-@IsTested("not tested",addedExactFixComments = false)
 class SimpleListAdapter<T : ViewBinding>(
     private val getBinding: (parent: ViewGroup) -> T,
     private val onBind: (binding: T, item: BaseListModel) -> Unit,
