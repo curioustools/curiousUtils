@@ -1,4 +1,4 @@
-package work.curioustools.curiousutils.core_droidjet.extensions.models
+package work.curioustools.curiousutils.core_droidjet.extensions.extras
 
 import androidx.annotation.Keep
 import androidx.annotation.StringRes

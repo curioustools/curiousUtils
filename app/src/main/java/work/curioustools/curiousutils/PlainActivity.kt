@@ -4,8 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import work.curioustools.curiousutils.core_droidjet.extensions.configureSystemBar
-import work.curioustools.curiousutils.core_droidjet.extensions.models.SystemBarsConfig
-import work.curioustools.curiousutils.core_droidjet.extensions.models.SystemBarsConfig.*
+import work.curioustools.curiousutils.core_droidjet.extensions.extras.SystemBarsConfig
+import work.curioustools.curiousutils.core_droidjet.extensions.extras.SystemBarsConfig.*
 
 class PlainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

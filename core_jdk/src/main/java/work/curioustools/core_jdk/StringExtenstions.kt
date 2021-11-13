@@ -2,33 +2,25 @@
 
 package work.curioustools.core_jdk
 
-// <EXTENSIONS>-----------------------------------------------------------------------------------------------------
-
-
-fun Char.isStrictlyALowerCase() = this in 'a'..'z' // will not match characters like ä
-
-fun Char.isStrictlyAnUpperCase() = this in 'A'..'Z' // will not match characters like ä
-
-fun Char.isStrictlyADigit() = this in '0'..'9'
-
-fun Char.isStrictlyAValidSpecialLetter() = this in CommonStringRegex.VALID_SPECIAL_CHARACTERS// does not have escape characters like  \ " '
-
-fun String?.toRegexOrError(): Regex {
-    this ?: error("null string passed to function `toRegexOrError` ($this) cannot be converted to regex")
-
-    return this.toRegex()//todo use regex patterns setOf(RegexOption,.,...)
-}
+import work.curioustools.core_jdk.extras.CommonStringRegex
+import work.curioustools.core_jdk.extras.EmailValidationResponse
+import work.curioustools.core_jdk.extras.PasswordValidationResponse
 
 fun String?.isValidEmail(): Boolean {
-    /** Note: as per this thread https://stackoverflow.com/q/46155/7500651 , email validation via regex is not ideal and there is no complete pattern that would handle all current and future 'emails'(and whatever the definition of email covers) . so i just used the pattern used in AOSP and made it JUnit Test friendly .Android pattern is accessible via : android.util.Patterns.EMAIL_ADDRESS */
+    /**
+     * Note: as per this thread https://stackoverflow.com/q/46155/7500651 ,
+     * email validation via regex is not ideal and there is no complete pattern
+     * that would handle all current and future
+     * 'emails'(and whatever the definition of email covers) .
+     * so i just used the pattern used in AOSP source and made it JUnit Test friendly .
+     * Android pattern is accessible via : android.util.Patterns.EMAIL_ADDRESS */
     this ?: return false
-    return this.matches(CommonStringRegex.VALID_EMAIL.toRegexOrError())
+    return this.matches(CommonStringRegex.VALID_EMAIL.toRegex())
 }
 
 fun String?.validateEmail(): EmailValidationResponse {
-    /** Note: as per this thread https://stackoverflow.com/q/46155/7500651 , email validation via regex is not ideal and there is no complete pattern that would handle all current and future 'emails'(and whatever the definition of email covers) . so i just used the pattern used in AOSP source and made it JUnit Test friendly .Android pattern is accessible via : android.util.Patterns.EMAIL_ADDRESS */
     this ?: return EmailValidationResponse.NULL_OR_BLANK
-    return if (this.matches(CommonStringRegex.VALID_EMAIL.toRegexOrError())) EmailValidationResponse.VALID
+    return if (isValidEmail()) EmailValidationResponse.VALID
     else EmailValidationResponse.IMPROPER_EMAIL
 }
 
@@ -92,42 +84,15 @@ fun String.capitalizeEachWord(separator: Char = ' '): String {
     return this.split(separator).joinToString(" ") { it.startWithUpperCase() }
 }
 
+fun String.ellipsize(maxLength: Int): String {
+    return if (length < maxLength) this
+    else "${substring(0, maxLength)}..."
+}
+
 fun String?.toIntSafe(default: Int = 0): Int {
     if (this == null) return default
     return kotlin.runCatching { this.toIntOrNull() }.getOrNull() ?: default
 }
-
-// </EXTENSIONS>-----------------------------------------------------------------------------------------------------
-
-// <HELPERS>---------------------------------------------------------------------------------------------------------
-
-object CommonStringRegex {
-    const val VALID_EMAIL = """[a-zA-Z0-9\+\.\_\%\-\+]{1,256}\@[a-zA-Z0-9][a-zA-Z0-9\-]{0,64}(\.[a-zA-Z0-9][a-zA-Z0-9\-]{0,25})+"""
-
-    const val VALID_SPECIAL_CHARACTERS = "~`!@#$%^&*()_-+={[}]|:;<,>.?/"
-}
-
-enum class EmailValidationResponse(val msg: String) {
-    VALID("Success"),
-    NULL_OR_BLANK("Email must not be empty"),
-    IMPROPER_EMAIL("Email does not match the standard email pattern of ${CommonStringRegex.VALID_EMAIL}")
-}
-
-sealed class PasswordValidationResponse(open val msg: String) {
-    object VALID : PasswordValidationResponse("Success")
-    object NULL_OR_BLANK : PasswordValidationResponse("Password must not be empty")
-    data class NO_MIN_UPPERCASE_LETTERS(val minCount: Int = 1) : PasswordValidationResponse("Password must have at least $minCount Capital letter(s)")
-    data class NO_LOWERCASE_LETTERS(val minCount: Int = 1) : PasswordValidationResponse("Password must have at least $minCount Lowercase letter(s)")
-    data class NO_MIN_Special_LETTERS(val minCount: Int = 1) : PasswordValidationResponse("Password must have at least $minCount letter(s) from ${CommonStringRegex.VALID_SPECIAL_CHARACTERS}")
-    data class NO_MIN_DIGITS(val minCount: Int = 1) : PasswordValidationResponse("Password must have at least $minCount digit(s)")
-    data class OUT_OF_BOUNDS_ERROR(val min: Int, val max: Int) : PasswordValidationResponse("Password must have $min to $max characters")
-    data class ILLEGAL_CHARACTER(val c: Char) : PasswordValidationResponse(" '$c ' is not a valid character")
-
-
-}
-// </HELPERS>---------------------------------------------------------------------------------------------------------
-
-// <TEST SUITE>---------------------------------------------------------------------------------------------------------
 
 
 private class StringExtensionsTest {
@@ -279,4 +244,3 @@ private class StringExtensionsTest {
 
 }
 
-// </TEST SUITE>---------------------------------------------------------------------------------------------------------

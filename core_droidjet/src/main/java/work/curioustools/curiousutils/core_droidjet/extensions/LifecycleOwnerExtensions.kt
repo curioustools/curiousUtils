@@ -3,8 +3,11 @@ package work.curioustools.curiousutils.core_droidjet.extensions
 import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
@@ -94,4 +97,16 @@ fun LifecycleOwner.launchNewActivityNewTask(className: String) {
 @Deprecated("use the main function directly", replaceWith = ReplaceWith("launchActivity"))
 fun LifecycleOwner.launchNewActivityClearTop(className: String) {
     launchActivity(activityPath = className, flags = CLEAR_TOP)
+}
+
+fun LifecycleOwner.launchPermissionSettings(requestCode: Int) {
+    val uriStr = "package:" + (getOwnerContext()?.packageName ?: "")
+    val permissionIntent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse(uriStr)).also { it.addCategory(Intent.CATEGORY_DEFAULT) }
+    launchActivity(permissionIntent, bundleOf(), requestCode)
+}
+
+
+fun LifecycleOwner.launchCustomTabWebView(url: String) {
+    val ctx = getOwnerContext() ?: return
+    CustomTabsIntent.Builder().build().launchUrl(ctx, Uri.parse(url))
 }

@@ -1,10 +1,15 @@
 package work.curioustools.curiousutils.core_droidjet.extensions
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
@@ -17,11 +22,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import com.google.android.material.color.MaterialColors
 
-import work.curioustools.curiousutils.core_droidjet.extensions.models.Snack
-import work.curioustools.curiousutils.core_droidjet.extensions.models.SystemBarsConfig
-import work.curioustools.curiousutils.core_droidjet.extensions.models.SystemBarsConfig.SystemBarType
+import work.curioustools.curiousutils.core_droidjet.extensions.extras.Snack
+import work.curioustools.curiousutils.core_droidjet.extensions.extras.SystemBarsConfig
+import work.curioustools.curiousutils.core_droidjet.extensions.extras.SystemBarsConfig.SystemBarType
 import kotlin.concurrent.thread
 
 
@@ -31,9 +35,25 @@ fun Context.getDrawableCompat(@DrawableRes res: Int): Drawable? {
     return ContextCompat.getDrawable(this, res)
 }
 
+fun Context.getColorDrawable(@ColorRes res: Int):ColorDrawable{
+    return ColorDrawable(getColorCompat(res))
+}
+
+
 fun Context?.getColorCompat(@ColorRes colorRes: Int): Int {
     this ?: return android.R.color.black
     return ContextCompat.getColor(this, colorRes)
+}
+
+fun Context?.getColorFromStringOrDefault(colorStr: String, @ColorRes default: Int = android.R.color.black): Int {
+    //use: #112233 (#rrggbb or #aarrggbb )format
+    this ?: return getColorCompat(default)
+    return kotlin.runCatching {
+        Color.parseColor(colorStr)
+    }.getOrElse {
+        it.printStackTrace()
+        getColorCompat(default)
+    }
 }
 
 fun Context?.getColorStateListCompat(@ColorRes colorRes: Int): ColorStateList {
@@ -57,6 +77,49 @@ fun Context?.showKeyboard() = getAsView().showKeyboard()
 fun Context?.showKeyboardForced() = getAsView().showKeyboardForced()
 fun Context?.hideKeyboard() = getAsView().hideKeyboard()
 fun Context?.showSnackBar(info: Snack = Snack()) = getAsView()?.showSnackBar(info)
+
+
+fun Context?.getDrawableFromName(iconName: String): Drawable? {
+    this ?: return null
+    return kotlin.runCatching {
+        val identifier = resources.getIdentifier(iconName, "drawable", packageName)
+        ContextCompat.getDrawable(this, identifier)
+    }.getOrElse {
+        it.printStackTrace()
+        null
+    }
+}
+
+fun Context?.copyToClipboard(text: String) {
+    this ?: return
+    val clipboard = ContextCompat.getSystemService(this, ClipboardManager::class.java)
+    val clip = ClipData.newPlainText("label", text)
+    clipboard?.setPrimaryClip(clip)
+}
+
+fun Context?.isLightColor(@ColorRes colorRes: Int): Boolean {
+    val color = getColorCompat(colorRes)
+    val customAnswer = Color.red(color) * 0.299 + Color.green(color) * 0.587 + Color.blue(color) * 0.114 > 160
+    //val libAnswer = MaterialColors.isColorLight(color).also { it.log("Lib::") }
+    return customAnswer
+}
+
+fun Context?.getGradientDrawable(startHashCode: String, endHashCode: String): GradientDrawable {
+    val orientation = GradientDrawable.Orientation.LEFT_RIGHT
+    val start = getColorFromStringOrDefault(startHashCode)
+    val end = getColorFromStringOrDefault(endHashCode)
+    return GradientDrawable(orientation, intArrayOf(start, end))
+}
+
+fun Context?.dpToPixel(dp: Int): Int {
+    this?:return 0
+    return (dp * applicationContext.resources.displayMetrics.density).toInt()
+}
+
+fun pixelsToDp(px: Int): Int {
+
+    return (px / Resources.getSystem().displayMetrics.density).toInt()
+}
 
 
 // Activity specific extensions---------------------------------------------------------------------------
@@ -116,7 +179,7 @@ fun Context?.configureSystemBar(config: SystemBarsConfig = SystemBarsConfig(), @
             if (isAndroidGTEquals28P() && config.navBarDividerColorRes != null) window.navigationBarDividerColor = getColorCompat(config.navBarDividerColorRes)
 
             //set tint for all
-            configureSystemBarsIconColors(tintDeterminingColor)
+            configureSystemBarsIconContrast(tintDeterminingColor)
         }
         SystemBarType.FULL_SCREEN_WITH_ICONS -> {
             //todo: this  causes the icons to  show up overlapping your content
@@ -141,10 +204,10 @@ fun Context?.configureSystemBar(config: SystemBarsConfig = SystemBarsConfig(), @
     }
 }
 
-fun Context?.configureSystemBarsIconColors(@ColorRes color: Int?) {
-    color ?: return
+fun Context?.configureSystemBarsIconContrast(@ColorRes bgColor: Int?) {
+    bgColor ?: return
     val bars = getAsActivity()?.window?.decorView ?: return
-    val isLightColor = isLightColor(color)
+    val isLightColor = isLightColor(bgColor)
     val whiteIcons = 0
     when {
         isAndroidGTEquals30R() -> {
@@ -205,10 +268,4 @@ fun Context?.configureSystemStatusIconColors(@ColorRes color: Int?) {
 
 }
 
-fun Context?.isLightColor(@ColorRes colorRes: Int): Boolean {
-    val color = getColorCompat(colorRes)
-    val customAnswer = Color.red(color) * 0.299 + Color.green(color) * 0.587 + Color.blue(color) * 0.114 > 160
-    //val libAnswer = MaterialColors.isColorLight(color).also { it.log("Lib::") }
-    return customAnswer
-}
 
